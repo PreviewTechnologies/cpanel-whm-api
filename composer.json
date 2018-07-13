@@ -1,5 +1,5 @@
 {
-    "name": "previewtechs/cpanel-whm-php",
+    "name": "previewtechs/cpanel-whm-api",
     "description": "Manage WHM and cPanel servers with PHP",
     "type": "library",
     "license": "MIT",
