@@ -1,0 +1,27 @@
+<?php
+
+namespace PreviewTechs\cPanelWHM\Exceptions;
+
+
+class ClientExceptions extends \Exception
+{
+    protected $reason;
+
+    public function __construct($message = "", $code = 0, $reason = null)
+    {
+        $this->reason = $reason;
+
+        parent::__construct($message, $code);
+    }
+
+    /**
+     * @param $message
+     * @param null $reason
+     *
+     * @return ClientExceptions
+     */
+    public static function accessDenied($message, $reason = null)
+    {
+        return new static($message, 0, $reason);
+    }
+}

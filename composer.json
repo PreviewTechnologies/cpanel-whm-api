@@ -1,0 +1,23 @@
+{
+    "name": "previewtechs/cpanel-whm-php",
+    "description": "Manage WHM and cPanel servers with PHP",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Shaharia Azam",
+            "email": "shaharia.azam@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.5",
+        "ext-curl": "*",
+        "guzzlehttp/psr7": "^1.4",
+        "php-http/guzzle6-adapter": "^1.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "PreviewTechs\\cPanelWHM\\": "src"
+        }
+    }
+}
