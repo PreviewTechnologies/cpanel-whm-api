@@ -117,4 +117,52 @@ class Accounts
             'page'     => $page
         ];
     }
+
+    /**
+     * Get an account details
+     *
+     * @link https://documentation.cpanel.net/display/DD/WHM+API+1+Functions+-+accountsummary
+     *
+     * @param null $user
+     * @param null $domain
+     *
+     * @return null|Account
+     * @throws ClientExceptions
+     * @throws Exception
+     */
+    public function getDetails($user = null, $domain = null)
+    {
+        if (empty($user) && empty($domain)) {
+            throw ClientExceptions::invalidArgument("You must provide either a username or a domain or both");
+        }
+
+        if ( ! empty($user) && ! empty($domain)) {
+            throw ClientExceptions::invalidArgument("You must provide only one argument either user OR domain (not both)");
+        }
+
+        $params = [];
+
+        if ( ! empty($user)) {
+            $params['user'] = $user;
+        }
+
+        if ( ! empty($domain)) {
+            $params['domain'] = $domain;
+        }
+
+        $result = $this->client->sendRequest("/json-api/accountsummary", "GET", $params);
+        if (empty($result)) {
+            return null;
+        }
+
+        if ($result['status'] === 0) {
+            throw ClientExceptions::recordNotFound(! empty($result['statusmsg']) ? $result['statusmsg'] : "Record not found");
+        }
+
+        if ( ! empty($result['acct']) && is_array($result['acct'])) {
+            return Account::buildFromArray($result['acct'][0]);
+        }
+
+        return null;
+    }
 }
