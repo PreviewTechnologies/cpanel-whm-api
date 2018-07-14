@@ -1011,7 +1011,9 @@ class Account
 
         $ac->setInodeUsed(intval($account['inodesused']));
 
-        $ac->setBackup((bool)$account['has_backup']);
+        if(!empty($account['has_backup'])){
+            $ac->setBackup((bool) $account['has_backup']);
+        }
 
         if ($account['max_emailacct_quota'] === "unlimited") {
             $ac->setMaxEmailAccountQuota(-1);
