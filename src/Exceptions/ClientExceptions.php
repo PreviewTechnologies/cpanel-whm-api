@@ -24,4 +24,26 @@ class ClientExceptions extends \Exception
     {
         return new static($message, 0, $reason);
     }
+
+    /**
+     * @param $message
+     * @param null $reason
+     *
+     * @return ClientExceptions
+     */
+    public static function recordNotFound($message, $reason = null)
+    {
+        return new static($message, 0, $reason);
+    }
+
+    /**
+     * @param $message
+     * @param null $reason
+     *
+     * @return ClientExceptions
+     */
+    public static function invalidArgument($message, $reason = null)
+    {
+        return new static($message, 0, $reason);
+    }
 }
