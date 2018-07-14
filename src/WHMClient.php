@@ -11,25 +11,30 @@ use PreviewTechs\cPanelWHM\Exceptions\ClientExceptions;
 class WHMClient
 {
     /**
+     *
      * @var string
      */
     protected $whmUser;
     /**
+     *
      * @var string
      */
     protected $apiToken;
 
     /**
+     *
      * @var string
      */
     protected $whmHost;
 
     /**
+     *
      * @var int
      */
     protected $whmPort;
 
     /**
+     *
      * @var HttpClient
      */
     protected $httpClient;
@@ -37,10 +42,10 @@ class WHMClient
     /**
      * Client constructor.
      *
-     * @param string $whmUser
+     * @param string   $whmUser
      * @param $apiToken
      * @param $whmHost
-     * @param int $whmPort
+     * @param int      $whmPort
      */
     public function __construct($whmUser = "root", $apiToken, $whmHost, $whmPort = 2087)
     {
@@ -55,6 +60,7 @@ class WHMClient
     }
 
     /**
+     *
      * @param HttpClient $client
      *
      * @return WHMClient
@@ -67,6 +73,7 @@ class WHMClient
     }
 
     /**
+     *
      * @return HttpClient
      */
     public function getHttpClient()
@@ -75,9 +82,10 @@ class WHMClient
     }
 
     /**
+     *
      * @param $endpoint
      * @param $method
-     * @param array $params
+     * @param array    $params
      *
      * @return mixed|\Psr\Http\Message\ResponseInterface
      * @throws ClientExceptions
@@ -101,9 +109,11 @@ class WHMClient
         }
 
         if ($response->getStatusCode() === 403) {
-            if ( ! empty($data['cpanelresult']['error'])) {
-                throw ClientExceptions::accessDenied($data['cpanelresult']['error'],
-                    $data['cpanelresult']['data']['reason']);
+            if (! empty($data['cpanelresult']['error'])) {
+                throw ClientExceptions::accessDenied(
+                    $data['cpanelresult']['error'],
+                    $data['cpanelresult']['data']['reason']
+                );
             }
         }
 

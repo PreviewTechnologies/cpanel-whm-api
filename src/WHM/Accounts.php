@@ -10,11 +10,13 @@ use PreviewTechs\cPanelWHM\WHMClient;
 
 /**
  * Class Accounts
+ *
  * @package PreviewTechs\cPanelWHM\WHM
  */
 class Accounts
 {
     /**
+     *
      * @var WHMClient
      */
     protected $client;
@@ -50,10 +52,10 @@ class Accounts
      *       echo $e->getMessage();
      *   }
      *
-     * @link  https://documentation.cpanel.net/display/DD/WHM+API+1+Functions+-+listaccts
+     * @link https://documentation.cpanel.net/display/DD/WHM+API+1+Functions+-+listaccts
      *
-     * @param null $keyword
-     * @param null $searchType
+     * @param null  $keyword
+     * @param null  $searchType
      * @param array $options
      *
      * @return array
@@ -72,31 +74,31 @@ class Accounts
             'api.chunk.start'  => $page * $limit
         ];
 
-        if ( ! empty($options['limit'])) {
+        if (! empty($options['limit'])) {
             $params['api.chunk.size'] = intval($options['limit']);
         }
 
-        if ( ! empty($options['page'])) {
+        if (! empty($options['page'])) {
             $params['api.chunk.start'] = intval($options['page']) * $params['api.chunk.size'];
         }
 
-        if ( ! empty($searchType) && ! in_array($searchType, ["domain", "owner", "user", "ip", "package"])) {
+        if (! empty($searchType) && ! in_array($searchType, ["domain", "owner", "user", "ip", "package"])) {
             throw new \InvalidArgumentException("`searchType` must be one of these - domain, owner, user, ip, package");
         }
 
-        if ( ! empty($options['searchmethod']) && ! in_array($options['searchmethod'], ["exact", "regex"])) {
+        if (! empty($options['searchmethod']) && ! in_array($options['searchmethod'], ["exact", "regex"])) {
             throw new \InvalidArgumentException("options[searchmethod] must be either `regex` or `exact`");
         }
 
-        if ( ! empty($options['want'])) {
+        if (! empty($options['want'])) {
             $params['want'] = $options['want'];
         }
 
-        if ( ! empty($searchType)) {
+        if (! empty($searchType)) {
             $params['searchtype'] = $searchType;
         }
 
-        if ( ! empty($keyword)) {
+        if (! empty($keyword)) {
             $params['search'] = $keyword;
             empty($searchType) ? $params['searchtype'] = "user" : null;
         }
@@ -136,17 +138,17 @@ class Accounts
             throw ClientExceptions::invalidArgument("You must provide either a username or a domain or both");
         }
 
-        if ( ! empty($user) && ! empty($domain)) {
+        if (! empty($user) && ! empty($domain)) {
             throw ClientExceptions::invalidArgument("You must provide only one argument either user OR domain (not both)");
         }
 
         $params = [];
 
-        if ( ! empty($user)) {
+        if (! empty($user)) {
             $params['user'] = $user;
         }
 
-        if ( ! empty($domain)) {
+        if (! empty($domain)) {
             $params['domain'] = $domain;
         }
 
@@ -159,7 +161,7 @@ class Accounts
             throw ClientExceptions::recordNotFound(! empty($result['statusmsg']) ? $result['statusmsg'] : "Record not found");
         }
 
-        if ( ! empty($result['acct']) && is_array($result['acct'])) {
+        if (! empty($result['acct']) && is_array($result['acct'])) {
             return Account::buildFromArray($result['acct'][0]);
         }
 

@@ -15,8 +15,9 @@ class ClientExceptions extends \Exception
     }
 
     /**
+     *
      * @param $message
-     * @param null $reason
+     * @param null    $reason
      *
      * @return ClientExceptions
      */
@@ -26,8 +27,9 @@ class ClientExceptions extends \Exception
     }
 
     /**
+     *
      * @param $message
-     * @param null $reason
+     * @param null    $reason
      *
      * @return ClientExceptions
      */
@@ -37,8 +39,9 @@ class ClientExceptions extends \Exception
     }
 
     /**
+     *
      * @param $message
-     * @param null $reason
+     * @param null    $reason
      *
      * @return ClientExceptions
      */

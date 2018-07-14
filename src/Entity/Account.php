@@ -37,6 +37,7 @@ class Account
 
     /**
      * The type of mailbox the account uses. mdbox/maildir
+     *
      * @var string
      */
     public $mailboxFormat;
@@ -80,151 +81,181 @@ class Account
     public $maxParkedDomains;
 
     /**
+     *
      * @var string
      */
     public $ipv6;
 
     /**
+     *
      * @var string
      */
     public $email;
 
     /**
+     *
      * @var string
      */
     public $partition;
 
     /**
+     *
      * @var integer
      */
     public $maxSQL;
 
     /**
+     *
      * @var \DateTime
      */
     public $createdAt;
 
     /**
+     *
      * @var bool
      */
     public $isBackupEnabled;
 
     /**
+     *
      * @var bool
      */
     public $outgoingMailSuspended;
 
     /**
+     *
      * @var string
      */
     public $owner;
 
     /**
+     *
      * @var string
      */
     public $suspensionReason;
 
     /**
+     *
      * @var bool
      */
     public $isLocked;
 
     /**
+     *
      * @var bool
      */
     public $outgoingMailCanHold;
 
     /**
+     *
      * @var \DateTime
      */
     public $suspendedAt;
 
     /**
+     *
      * @var int
      */
     public $maxFTP;
 
     /**
+     *
      * @var int
      */
     public $maxEmailPerHour;
 
     /**
+     *
      * @var bool
      */
     public $temporary;
 
     /**
+     *
      * @var string
      */
     public $ipAddress;
 
     /**
+     *
      * @var int
      */
     public $uid;
 
     /**
+     *
      * @var bool
      */
     public $suspended;
 
     /**
+     *
      * @var bool
      */
     public $backup;
 
     /**
+     *
      * @var int
      */
     public $maxPOP;
 
     /**
+     *
      * @var int
      */
     public $maxSubDomain;
 
     /**
+     *
      * @var int
      */
     public $maxEmailAccountQuota;
 
     /**
+     *
      * @var int
      */
     public $diskUsed;
 
     /**
+     *
      * @var int
      */
     public $inodeUsed;
 
     /**
+     *
      * @var
      */
     public $minDeferFailToTriggerProtection;
 
     /**
+     *
      * @var string
      */
     public $planName;
 
     /**
+     *
      * @var int
      */
     public $inodesLimit;
 
     /**
+     *
      * @var int
      */
     public $diskLimit;
 
     /**
+     *
      * @var bool
      */
     public $legacyBackup;
 
     /**
+     *
      * @return string
      */
     public function getUser()
@@ -233,6 +264,7 @@ class Account
     }
 
     /**
+     *
      * @param string $user
      *
      * @return Account
@@ -245,6 +277,7 @@ class Account
     }
 
     /**
+     *
      * @return string
      */
     public function getDomain()
@@ -253,6 +286,7 @@ class Account
     }
 
     /**
+     *
      * @param string $domain
      *
      * @return Account
@@ -265,6 +299,7 @@ class Account
     }
 
     /**
+     *
      * @return int
      */
     public function getMaxDeferFailMailPercentage()
@@ -273,6 +308,7 @@ class Account
     }
 
     /**
+     *
      * @param int $maxDeferFailMailPercentage
      *
      * @return Account
@@ -285,6 +321,7 @@ class Account
     }
 
     /**
+     *
      * @return string
      */
     public function getShell()
@@ -293,6 +330,7 @@ class Account
     }
 
     /**
+     *
      * @param string $shell
      *
      * @return Account
@@ -305,6 +343,7 @@ class Account
     }
 
     /**
+     *
      * @return string
      */
     public function getMailboxFormat()
@@ -313,6 +352,7 @@ class Account
     }
 
     /**
+     *
      * @param string $mailboxFormat
      *
      * @return Account
@@ -325,6 +365,7 @@ class Account
     }
 
     /**
+     *
      * @return string
      */
     public function getTheme()
@@ -333,6 +374,7 @@ class Account
     }
 
     /**
+     *
      * @param string $theme
      *
      * @return Account
@@ -345,6 +387,7 @@ class Account
     }
 
     /**
+     *
      * @return int
      */
     public function getMaxMailingList()
@@ -353,6 +396,7 @@ class Account
     }
 
     /**
+     *
      * @param int $maxMailingList
      *
      * @return Account
@@ -365,6 +409,7 @@ class Account
     }
 
     /**
+     *
      * @return int
      */
     public function getMaxAddonDomains()
@@ -373,6 +418,7 @@ class Account
     }
 
     /**
+     *
      * @param int $maxAddonDomains
      *
      * @return Account
@@ -385,6 +431,7 @@ class Account
     }
 
     /**
+     *
      * @return int
      */
     public function getMaxParkedDomains()
@@ -393,6 +440,7 @@ class Account
     }
 
     /**
+     *
      * @param int $maxParkedDomains
      *
      * @return Account
@@ -405,6 +453,7 @@ class Account
     }
 
     /**
+     *
      * @return string
      */
     public function getIpv6()
@@ -413,6 +462,7 @@ class Account
     }
 
     /**
+     *
      * @param string $ipv6
      *
      * @return Account
@@ -425,6 +475,7 @@ class Account
     }
 
     /**
+     *
      * @return string
      */
     public function getEmail()
@@ -433,6 +484,7 @@ class Account
     }
 
     /**
+     *
      * @param string $email
      *
      * @return Account
@@ -445,6 +497,7 @@ class Account
     }
 
     /**
+     *
      * @return string
      */
     public function getPartition()
@@ -453,6 +506,7 @@ class Account
     }
 
     /**
+     *
      * @param string $partition
      *
      * @return Account
@@ -465,6 +519,7 @@ class Account
     }
 
     /**
+     *
      * @return int
      */
     public function getMaxSQL()
@@ -473,6 +528,7 @@ class Account
     }
 
     /**
+     *
      * @param int $maxSQL
      *
      * @return Account
@@ -485,6 +541,7 @@ class Account
     }
 
     /**
+     *
      * @return \DateTime
      */
     public function getCreatedAt()
@@ -493,6 +550,7 @@ class Account
     }
 
     /**
+     *
      * @param \DateTime $createdAt
      *
      * @return Account
@@ -505,6 +563,7 @@ class Account
     }
 
     /**
+     *
      * @return bool
      */
     public function isBackupEnabled()
@@ -513,6 +572,7 @@ class Account
     }
 
     /**
+     *
      * @param bool $isBackupEnabled
      *
      * @return Account
@@ -525,6 +585,7 @@ class Account
     }
 
     /**
+     *
      * @return bool
      */
     public function isOutgoingMailSuspended()
@@ -533,6 +594,7 @@ class Account
     }
 
     /**
+     *
      * @param bool $outgoingMailSuspended
      *
      * @return Account
@@ -545,6 +607,7 @@ class Account
     }
 
     /**
+     *
      * @return string
      */
     public function getOwner()
@@ -553,6 +616,7 @@ class Account
     }
 
     /**
+     *
      * @param string $owner
      *
      * @return Account
@@ -565,6 +629,7 @@ class Account
     }
 
     /**
+     *
      * @return string
      */
     public function getSuspensionReason()
@@ -573,6 +638,7 @@ class Account
     }
 
     /**
+     *
      * @param string $suspensionReason
      *
      * @return Account
@@ -585,6 +651,7 @@ class Account
     }
 
     /**
+     *
      * @return bool
      */
     public function isLocked()
@@ -593,6 +660,7 @@ class Account
     }
 
     /**
+     *
      * @param bool $isLocked
      *
      * @return Account
@@ -605,6 +673,7 @@ class Account
     }
 
     /**
+     *
      * @return bool
      */
     public function isOutgoingMailCanHold()
@@ -613,6 +682,7 @@ class Account
     }
 
     /**
+     *
      * @param bool $outgoingMailCanHold
      *
      * @return Account
@@ -625,6 +695,7 @@ class Account
     }
 
     /**
+     *
      * @return \DateTime
      */
     public function getSuspendedAt()
@@ -633,6 +704,7 @@ class Account
     }
 
     /**
+     *
      * @param \DateTime $suspendedAt
      *
      * @return Account
@@ -645,6 +717,7 @@ class Account
     }
 
     /**
+     *
      * @return int
      */
     public function getMaxFTP()
@@ -653,6 +726,7 @@ class Account
     }
 
     /**
+     *
      * @param int $maxFTP
      *
      * @return Account
@@ -665,6 +739,7 @@ class Account
     }
 
     /**
+     *
      * @return int
      */
     public function getMaxEmailPerHour()
@@ -673,6 +748,7 @@ class Account
     }
 
     /**
+     *
      * @param int $maxEmailPerHour
      *
      * @return Account
@@ -685,6 +761,7 @@ class Account
     }
 
     /**
+     *
      * @return bool
      */
     public function isTemporary()
@@ -693,6 +770,7 @@ class Account
     }
 
     /**
+     *
      * @param bool $temporary
      *
      * @return Account
@@ -705,6 +783,7 @@ class Account
     }
 
     /**
+     *
      * @return string
      */
     public function getIpAddress()
@@ -713,6 +792,7 @@ class Account
     }
 
     /**
+     *
      * @param string $ipAddress
      *
      * @return Account
@@ -725,6 +805,7 @@ class Account
     }
 
     /**
+     *
      * @return int
      */
     public function getUid()
@@ -733,6 +814,7 @@ class Account
     }
 
     /**
+     *
      * @param int $uid
      *
      * @return Account
@@ -745,6 +827,7 @@ class Account
     }
 
     /**
+     *
      * @return bool
      */
     public function isSuspended()
@@ -753,6 +836,7 @@ class Account
     }
 
     /**
+     *
      * @param bool $suspended
      *
      * @return Account
@@ -765,6 +849,7 @@ class Account
     }
 
     /**
+     *
      * @return bool
      */
     public function isBackup()
@@ -773,6 +858,7 @@ class Account
     }
 
     /**
+     *
      * @param bool $backup
      *
      * @return Account
@@ -785,6 +871,7 @@ class Account
     }
 
     /**
+     *
      * @return int
      */
     public function getMaxPOP()
@@ -793,6 +880,7 @@ class Account
     }
 
     /**
+     *
      * @param int $maxPOP
      *
      * @return Account
@@ -805,6 +893,7 @@ class Account
     }
 
     /**
+     *
      * @return int
      */
     public function getMaxSubDomain()
@@ -813,6 +902,7 @@ class Account
     }
 
     /**
+     *
      * @param int $maxSubDomain
      *
      * @return Account
@@ -825,6 +915,7 @@ class Account
     }
 
     /**
+     *
      * @return int
      */
     public function getMaxEmailAccountQuota()
@@ -833,6 +924,7 @@ class Account
     }
 
     /**
+     *
      * @param int $maxEmailAccountQuota
      *
      * @return Account
@@ -845,6 +937,7 @@ class Account
     }
 
     /**
+     *
      * @return int
      */
     public function getDiskUsed()
@@ -853,6 +946,7 @@ class Account
     }
 
     /**
+     *
      * @param int $diskUsed
      *
      * @return Account
@@ -865,6 +959,7 @@ class Account
     }
 
     /**
+     *
      * @return int
      */
     public function getInodeUsed()
@@ -873,6 +968,7 @@ class Account
     }
 
     /**
+     *
      * @param int $inodeUsed
      *
      * @return Account
@@ -885,6 +981,7 @@ class Account
     }
 
     /**
+     *
      * @return mixed
      */
     public function getMinDeferFailToTriggerProtection()
@@ -893,6 +990,7 @@ class Account
     }
 
     /**
+     *
      * @param mixed $minDeferFailToTriggerProtection
      *
      * @return Account
@@ -905,6 +1003,7 @@ class Account
     }
 
     /**
+     *
      * @return string
      */
     public function getPlanName()
@@ -913,6 +1012,7 @@ class Account
     }
 
     /**
+     *
      * @param string $planName
      *
      * @return Account
@@ -925,6 +1025,7 @@ class Account
     }
 
     /**
+     *
      * @return int
      */
     public function getInodesLimit()
@@ -933,6 +1034,7 @@ class Account
     }
 
     /**
+     *
      * @param int $inodesLimit
      *
      * @return Account
@@ -945,6 +1047,7 @@ class Account
     }
 
     /**
+     *
      * @return int
      */
     public function getDiskLimit()
@@ -953,6 +1056,7 @@ class Account
     }
 
     /**
+     *
      * @param int $diskLimit
      *
      * @return Account
@@ -965,6 +1069,7 @@ class Account
     }
 
     /**
+     *
      * @return bool
      */
     public function isLegacyBackup()
@@ -973,6 +1078,7 @@ class Account
     }
 
     /**
+     *
      * @param bool $legacyBackup
      *
      * @return Account
@@ -985,6 +1091,7 @@ class Account
     }
 
     /**
+     *
      * @param array $account
      *
      * @return Account
@@ -1011,7 +1118,7 @@ class Account
 
         $ac->setInodeUsed(intval($account['inodesused']));
 
-        if(!empty($account['has_backup'])){
+        if(!empty($account['has_backup'])) {
             $ac->setBackup((bool) $account['has_backup']);
         }
 
@@ -1070,6 +1177,7 @@ class Account
     }
 
     /**
+     *
      * @return array
      */
     public function toArray()
