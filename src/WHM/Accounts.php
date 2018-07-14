@@ -2,7 +2,6 @@
 
 namespace PreviewTechs\cPanelWHM\WHM;
 
-
 use Http\Client\Exception;
 use PreviewTechs\cPanelWHM\Entity\Account;
 use PreviewTechs\cPanelWHM\Exceptions\ClientExceptions;
@@ -139,7 +138,9 @@ class Accounts
         }
 
         if (! empty($user) && ! empty($domain)) {
-            throw ClientExceptions::invalidArgument("You must provide only one argument either user OR domain (not both)");
+            throw ClientExceptions::invalidArgument(
+                "You must provide only one argument either user OR domain (not both)"
+            );
         }
 
         $params = [];
@@ -158,7 +159,9 @@ class Accounts
         }
 
         if ($result['status'] === 0) {
-            throw ClientExceptions::recordNotFound(! empty($result['statusmsg']) ? $result['statusmsg'] : "Record not found");
+            throw ClientExceptions::recordNotFound(
+                ! empty($result['statusmsg']) ? $result['statusmsg'] : "Record not found"
+            );
         }
 
         if (! empty($result['acct']) && is_array($result['acct'])) {

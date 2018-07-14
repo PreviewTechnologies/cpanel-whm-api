@@ -2,7 +2,6 @@
 
 namespace PreviewTechs\cPanelWHM;
 
-
 use GuzzleHttp\Psr7\Request;
 use Http\Adapter\Guzzle6\Client;
 use Http\Client\HttpClient;
@@ -47,7 +46,7 @@ class WHMClient
      * @param $whmHost
      * @param int      $whmPort
      */
-    public function __construct($whmUser = "root", $apiToken, $whmHost, $whmPort = 2087)
+    public function __construct($whmUser, $apiToken, $whmHost, $whmPort = 2087)
     {
         $this->whmUser  = $whmUser;
         $this->apiToken = $apiToken;

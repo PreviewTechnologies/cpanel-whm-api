@@ -2,7 +2,6 @@
 
 namespace PreviewTechs\cPanelWHM\Entity;
 
-
 class Account
 {
     /**
@@ -21,7 +20,9 @@ class Account
 
 
     /**
-     * The percentage of failed or deferred email messages that the account can send per hour before outgoing mail is rate-limited.
+     * The percentage of failed or deferred email messages that the account can send per hour
+     * before outgoing mail is rate-limited.
+     *
      * unlimited / An integer that represents a percentage of messages.
      *
      * @var integer
@@ -1118,8 +1119,8 @@ class Account
 
         $ac->setInodeUsed(intval($account['inodesused']));
 
-        if(!empty($account['has_backup'])) {
-            $ac->setBackup((bool) $account['has_backup']);
+        if (! empty($account['has_backup'])) {
+            $ac->setBackup((bool)$account['has_backup']);
         }
 
         if ($account['max_emailacct_quota'] === "unlimited") {
@@ -1131,7 +1132,9 @@ class Account
         $ac->setEmail($account['email']);
         $ac->setSuspensionReason($account['suspendreason']);
         $ac->setLegacyBackup((bool)$account['legacy_backup']);
-        $ac->setMaxEmailPerHour($account['max_email_per_hour'] === "unlimited" ? -1 : intval($account['max_email_per_hour']));
+        $ac->setMaxEmailPerHour(
+            $account['max_email_per_hour'] === "unlimited" ? -1 : intval($account['max_email_per_hour'])
+        );
         $ac->setIsBackupEnabled((bool)$account['backup']);
         $ac->setMaxPOP($account['maxpop'] === "unlimited" ? -1 : intval($account['maxpop']));
         $ac->setUid(intval($account['uid']));

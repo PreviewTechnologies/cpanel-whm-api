@@ -2,7 +2,6 @@
 
 namespace PreviewTechs\cPanelWHM\Exceptions;
 
-
 class ClientExceptions extends \Exception
 {
     protected $reason;
