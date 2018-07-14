@@ -8,6 +8,10 @@ use PreviewTechs\cPanelWHM\Entity\Account;
 use PreviewTechs\cPanelWHM\Exceptions\ClientExceptions;
 use PreviewTechs\cPanelWHM\WHMClient;
 
+/**
+ * Class Accounts
+ * @package PreviewTechs\cPanelWHM\WHM
+ */
 class Accounts
 {
     /**
@@ -15,12 +19,39 @@ class Accounts
      */
     protected $client;
 
+    /**
+     * Accounts constructor.
+     *
+     * @param WHMClient $client
+     */
     public function __construct(WHMClient $client)
     {
         $this->client = $client;
     }
 
     /**
+     * Search accounts from your WHM server.
+     *
+     * $accounts = new Accounts($c);
+     * $keyword = "search_keyword";
+     * $searchType = "username";   //valid search types are "domain", "owner", "user", "ip", "package"
+     * $options = [
+     *       'searchmethod' => "exact",   //"exact" or "regex",
+     *       "page" => 1,
+     *       "limit" => 10,   //per page,
+     *       "want" => "username"    //A comma-separated list of fields you want to fetch
+     *   ];
+     *
+     * try {
+     *       $accounts->searchAccounts($keyword, $searchType, $options);
+     *   } catch (\Http\Client\Exception $e) {
+     *       echo $e->getMessage();
+     *   } catch (\PreviewTechs\cPanelWHM\Exceptions\ClientExceptions $e) {
+     *       echo $e->getMessage();
+     *   }
+     *
+     * @link  https://documentation.cpanel.net/display/DD/WHM+API+1+Functions+-+listaccts
+     *
      * @param null $keyword
      * @param null $searchType
      * @param array $options
@@ -80,6 +111,10 @@ class Accounts
             $accounts[] = Account::buildFromArray($account);
         }
 
-        return ['accounts' => $accounts, 'count' => $params['api.chunk.size'], 'page' => $page];
+        return [
+            'accounts' => $accounts,
+            'count'    => $params['api.chunk.size'],
+            'page'     => $page
+        ];
     }
 }
