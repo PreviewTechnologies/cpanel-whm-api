@@ -4,6 +4,8 @@ namespace PreviewTechs\cPanelWHM;
 
 
 use GuzzleHttp\Psr7\Request;
+use Http\Adapter\Guzzle6\Client;
+use Http\Client\HttpClient;
 use PreviewTechs\cPanelWHM\Exceptions\ClientExceptions;
 
 class WHMClient
@@ -28,7 +30,7 @@ class WHMClient
     protected $whmPort;
 
     /**
-     * @var \Http\Adapter\Guzzle6\Client
+     * @var HttpClient
      */
     protected $httpClient;
 
@@ -47,21 +49,29 @@ class WHMClient
         $this->whmHost  = $whmHost;
         $this->whmPort  = $whmPort;
 
-        $this->httpClient = self::buildHttpClient([]);
+        $client = Client::createWithConfig(['timeout' => 15]);
+        $this->setHttpClient($client);
+        $this->httpClient = $this->getHttpClient();
     }
 
     /**
-     * @param array $config
+     * @param HttpClient $client
      *
-     * @return \Http\Adapter\Guzzle6\Client
+     * @return WHMClient
      */
-    public static function buildHttpClient(array $config = [])
+    public function setHttpClient(HttpClient $client)
     {
-        $config = ['timeout' => 15];
+        $this->httpClient = $client;
 
-        $client = \Http\Adapter\Guzzle6\Client::createWithConfig($config);
+        return $this;
+    }
 
-        return $client;
+    /**
+     * @return HttpClient
+     */
+    public function getHttpClient()
+    {
+        return $this->httpClient;
     }
 
     /**
@@ -86,13 +96,14 @@ class WHMClient
         $data = [];
         if (strpos($response->getHeaderLine("Content-Type"), "application/json") === 0) {
             $data = json_decode((string)$response->getBody(), true);
-        }elseif (strpos($response->getHeaderLine("Content-Type"), "text/plain") === 0) {
+        } elseif (strpos($response->getHeaderLine("Content-Type"), "text/plain") === 0) {
             $data = json_decode((string)$response->getBody(), true);
         }
 
-        if($response->getStatusCode() === 403){
-            if(!empty($data['cpanelresult']['error'])){
-                throw ClientExceptions::accessDenied($data['cpanelresult']['error'], $data['cpanelresult']['data']['reason']);
+        if ($response->getStatusCode() === 403) {
+            if ( ! empty($data['cpanelresult']['error'])) {
+                throw ClientExceptions::accessDenied($data['cpanelresult']['error'],
+                    $data['cpanelresult']['data']['reason']);
             }
         }
 
