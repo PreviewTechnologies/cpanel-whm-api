@@ -380,17 +380,17 @@ class Accounts
         $params = ['domain' => $domain];
 
         $result = $this->client->sendRequest("/json-api/domainuserdata", "GET", $params);
-        if(empty($result)){
+        if (empty($result)) {
             return null;
         }
 
-        if($result['result'][0]['status'] === 0){
+        if ($result['result'][0]['status'] === 0) {
             throw new ClientExceptions($result['result'][0]['statusmsg']);
         }
 
         $userData = $result['userdata'];
         $domainUser = new DomainUser();
-        $domainUser->setHasCGI((bool) $userData['hascgi']);
+        $domainUser->setHasCGI((bool)$userData['hascgi']);
         $domainUser->setServerName($userData['servername']);
         $domainUser->setOwner($userData['owner']);
         $domainUser->setScriptAlias($userData['scriptalias']);
@@ -400,11 +400,11 @@ class Accounts
         $domainUser->setGroup($userData['group']);
         $domainUser->setIpAddress($userData['ip']);
         $domainUser->setPort($userData['port']);
-        $domainUser->setPhpOpenBaseDirectoryProtect((bool) $userData['phpopenbasedirprotect']);
+        $domainUser->setPhpOpenBaseDirectoryProtect((bool)$userData['phpopenbasedirprotect']);
 
-        if($userData['usecanonicalname'] === "Off"){
+        if ($userData['usecanonicalname'] === "Off") {
             $domainUser->setUseCanonicalName(false);
-        }elseif($userData['usecanonicalname'] === "On"){
+        } elseif ($userData['usecanonicalname'] === "On") {
             $domainUser->setUseCanonicalName(true);
         }
 
@@ -454,18 +454,18 @@ class Accounts
         ];
 
         $usersJson = [];
-        foreach ($usernames as $username){
+        foreach ($usernames as $username) {
             $usersJson[$username] = 1;
         }
 
         $params['users_json'] = json_encode($usersJson);
 
         $result = $this->client->sendRequest("/json-api/forcepasswordchange", "GET", $params);
-        if($result['metadata']['result'] === 0){
+        if ($result['metadata']['result'] === 0) {
             throw new ClientExceptions($result['metadata']['reason']);
         }
 
-        if(!empty($result['data'])){
+        if (!empty($result['data'])) {
             return $result['updated'];
         }
 
@@ -487,15 +487,15 @@ class Accounts
         $params = [];
         $result = $this->client->sendRequest("/json-api/get_domain_info", "GET", $params);
 
-        if(empty($result)){
+        if (empty($result)) {
             return null;
         }
 
-        if(!empty($result['metadata']) && $result['metadata']['result'] === 1){
+        if (!empty($result['metadata']) && $result['metadata']['result'] === 1) {
             $domains = $result['data']['domains'];
 
             $domainList = [];
-            foreach ($domains as $domain){
+            foreach ($domains as $domain) {
                 $do = new Domain();
                 $do->setPort(intval($domain['port']));
                 $do->setUser($domain['user']);
@@ -506,9 +506,9 @@ class Accounts
                 $do->setPhpVersion($domain['php_version']);
                 $do->setUserOwner($domain['user_owner']);
                 $do->setDomainType($domain['domain_type']);
-                $do->setIpv6IsDedicated((bool) $domain['ipv6_is_dedicated']);
+                $do->setIpv6IsDedicated((bool)$domain['ipv6_is_dedicated']);
                 $do->setIpv4($domain['ipv4']);
-                $do->setModSecurityEnabled((bool) $domain['modsecurity_enabled']);
+                $do->setModSecurityEnabled((bool)$domain['modsecurity_enabled']);
                 $do->setDocRoot($domain['docroot']);
                 $domainList[] = $do;
             }

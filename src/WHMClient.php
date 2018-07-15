@@ -41,17 +41,17 @@ class WHMClient
     /**
      * Client constructor.
      *
-     * @param string   $whmUser
+     * @param string $whmUser
      * @param $apiToken
      * @param $whmHost
-     * @param int      $whmPort
+     * @param int $whmPort
      */
     public function __construct($whmUser, $apiToken, $whmHost, $whmPort = 2087)
     {
-        $this->whmUser  = $whmUser;
+        $this->whmUser = $whmUser;
         $this->apiToken = $apiToken;
-        $this->whmHost  = $whmHost;
-        $this->whmPort  = $whmPort;
+        $this->whmHost = $whmHost;
+        $this->whmPort = $whmPort;
 
         $client = Client::createWithConfig(['timeout' => 120]);
         $this->setHttpClient($client);
@@ -84,7 +84,7 @@ class WHMClient
      *
      * @param $endpoint
      * @param $method
-     * @param array    $params
+     * @param array $params
      *
      * @return mixed|\Psr\Http\Message\ResponseInterface
      * @throws ClientExceptions
@@ -95,7 +95,7 @@ class WHMClient
         $params = array_merge(['api.version' => 1], $params);
         $queryParams = http_build_query($params);
 
-        $url         = sprintf("https://%s:%s%s", $this->whmHost, $this->whmPort, $endpoint);
+        $url = sprintf("https://%s:%s%s", $this->whmHost, $this->whmPort, $endpoint);
 
         $request = new Request($method, $url . "?" . $queryParams);
         $request = $request->withHeader("Authorization", "whm {$this->whmUser}:{$this->apiToken}");
@@ -109,12 +109,12 @@ class WHMClient
             $data = json_decode((string)$response->getBody(), true);
         }
 
-        if(array_key_exists("status", $data) && $data['status'] === 0){
+        if (array_key_exists("status", $data) && $data['status'] === 0) {
             throw ClientExceptions::accessDenied(!empty($data['statusmsg']) ? $data['statusmsg'] : null);
         }
 
         if ($response->getStatusCode() === 403) {
-            if (! empty($data['cpanelresult']['error'])) {
+            if (!empty($data['cpanelresult']['error'])) {
                 throw ClientExceptions::accessDenied(
                     $data['cpanelresult']['error'],
                     $data['cpanelresult']['data']['reason']
