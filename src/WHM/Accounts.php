@@ -4,6 +4,7 @@ namespace PreviewTechs\cPanelWHM\WHM;
 
 use Http\Client\Exception;
 use PreviewTechs\cPanelWHM\Entity\Account;
+use PreviewTechs\cPanelWHM\Entity\Domain;
 use PreviewTechs\cPanelWHM\Entity\DomainUser;
 use PreviewTechs\cPanelWHM\Exceptions\ClientExceptions;
 use PreviewTechs\cPanelWHM\WHMClient;
@@ -466,6 +467,53 @@ class Accounts
 
         if(!empty($result['data'])){
             return $result['updated'];
+        }
+
+        return null;
+    }
+
+    /**
+     * This function returns information about each domain on the server.
+     *
+     * WHM API function: Accounts -> get_domain_info
+     * @link https://documentation.cpanel.net/display/DD/WHM+API+1+Functions+-+get_domain_info
+     *
+     * @return Domain[]|null
+     * @throws ClientExceptions
+     * @throws Exception
+     */
+    public function getDomains()
+    {
+        $params = [];
+        $result = $this->client->sendRequest("/json-api/get_domain_info", "GET", $params);
+
+        if(empty($result)){
+            return null;
+        }
+
+        if(!empty($result['metadata']) && $result['metadata']['result'] === 1){
+            $domains = $result['data']['domains'];
+
+            $domainList = [];
+            foreach ($domains as $domain){
+                $do = new Domain();
+                $do->setPort(intval($domain['port']));
+                $do->setUser($domain['user']);
+                $do->setDomain($domain['domain']);
+                $do->setIpv4SSL($domain['ipv4_ssl']);
+                $do->setIpv6($domain['ipv6']);
+                $do->setSslPort(intval($domain['port_ssl']));
+                $do->setPhpVersion($domain['php_version']);
+                $do->setUserOwner($domain['user_owner']);
+                $do->setDomainType($domain['domain_type']);
+                $do->setIpv6IsDedicated((bool) $domain['ipv6_is_dedicated']);
+                $do->setIpv4($domain['ipv4']);
+                $do->setModSecurityEnabled((bool) $domain['modsecurity_enabled']);
+                $do->setDocRoot($domain['docroot']);
+                $domainList[] = $do;
+            }
+
+            return $domainList;
         }
 
         return null;
