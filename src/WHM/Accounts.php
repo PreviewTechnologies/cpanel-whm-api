@@ -1001,4 +1001,56 @@ class Accounts
 
         return false;
     }
+
+    /**
+     * This function unsuspends an account.
+     * WHM API function: Accounts -> unsuspendacct
+     * @link https://documentation.cpanel.net/display/DD/WHM+API+1+Functions+-+unsuspendacct
+     *
+     * @param $user
+     *
+     * @return bool
+     * @throws ClientExceptions
+     * @throws Exception
+     */
+    public function unsuspend($user)
+    {
+        $params = ['user' => $user];
+        $result = $this->client->sendRequest("/json-api/unsuspendacct", "GET", $params);
+
+        if(!empty($result['metadata']) && $result['metadata']['result'] === 0){
+            throw new ClientExceptions($result['metadata']['reason']);
+        }
+
+        if(!empty($result['metadata']) && $result['metadata']['result'] === 1){
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * This function checks for username conflicts during account creation.
+     * WHM API function: verify_new_username
+     * @link https://documentation.cpanel.net/display/DD/WHM+API+1+Functions+-+verify_new_username
+     *
+     * @param $username
+     *
+     * @return bool
+     * @throws ClientExceptions
+     * @throws Exception
+     */
+    public function validateNewUsername($username)
+    {
+        $params = ['user' => $username];
+        $result = $this->client->sendRequest("/json-api/verify_new_username", "GET", $params);
+
+        if(!empty($result['metadata']) && $result['metadata']['result'] === 0){
+            throw new ClientExceptions($result['metadata']['reason']);
+        }
+
+        if(!empty($result['metadata']) && $result['metadata']['result'] === 1){
+            return true;
+        }
+    }
 }
