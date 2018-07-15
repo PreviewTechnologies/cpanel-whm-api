@@ -413,4 +413,23 @@ class Accounts
 
         return $domainUser;
     }
+
+    /**
+     * This function modifies a user's disk quota.
+     * WHM API function: Accounts -> editquota
+     * @link https://documentation.cpanel.net/display/DD/WHM+API+1+Functions+-+editquota
+     *
+     * @param $username
+     * @param $newQuota
+     * @return bool
+     * @throws ClientExceptions
+     * @throws Exception
+     */
+    public function changeDiskSpaceQuota($username, $newQuota)
+    {
+        $params = ['user' => $username, 'quota' => $newQuota];
+
+        $this->client->sendRequest("/json-api/editquota", "GET", $params);
+        return true;
+    }
 }
