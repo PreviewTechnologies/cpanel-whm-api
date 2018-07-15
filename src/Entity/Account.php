@@ -256,6 +256,36 @@ class Account
     public $legacyBackup;
 
     /**
+     * @var string|null
+     */
+    public $password;
+
+    /**
+     * @var bool|null
+     */
+    public $cgiEnable;
+
+    /**
+     * @var bool
+     */
+    public $spamAssassinEnable;
+
+    /**
+     * @var bool
+     */
+    public $frontPageEnable;
+
+    /**
+     * @var int
+     */
+    public $bandwidthLimit;
+
+    /**
+     * @var string|null
+     */
+    public $languagePreference;
+
+    /**
      *
      * @return string
      */
@@ -1088,6 +1118,114 @@ class Account
     {
         $this->legacyBackup = $legacyBackup;
 
+        return $this;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getPassword()
+    {
+        return $this->password;
+    }
+
+    /**
+     * @param null|string $password
+     * @return Account
+     */
+    public function setPassword($password)
+    {
+        $this->password = $password;
+        return $this;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function isCgiEnable()
+    {
+        return $this->cgiEnable;
+    }
+
+    /**
+     * @param bool|null $cgiEnable
+     * @return Account
+     */
+    public function setCgiEnable($cgiEnable)
+    {
+        $this->cgiEnable = $cgiEnable;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSpamAssassinEnable()
+    {
+        return $this->spamAssassinEnable;
+    }
+
+    /**
+     * @param bool $spamAssassinEnable
+     * @return Account
+     */
+    public function setSpamAssassinEnable($spamAssassinEnable)
+    {
+        $this->spamAssassinEnable = $spamAssassinEnable;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isFrontPageEnable()
+    {
+        return $this->frontPageEnable;
+    }
+
+    /**
+     * @param bool $frontPageEnable
+     * @return Account
+     */
+    public function setFrontPageEnable($frontPageEnable)
+    {
+        $this->frontPageEnable = $frontPageEnable;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getBandwidthLimit()
+    {
+        return $this->bandwidthLimit;
+    }
+
+    /**
+     * @param int $bandwidthLimit
+     * @return Account
+     */
+    public function setBandwidthLimit($bandwidthLimit)
+    {
+        $this->bandwidthLimit = $bandwidthLimit;
+        return $this;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getLanguagePreference()
+    {
+        return $this->languagePreference;
+    }
+
+    /**
+     * @param null|string $languagePreference
+     * @return Account
+     */
+    public function setLanguagePreference($languagePreference)
+    {
+        $this->languagePreference = $languagePreference;
         return $this;
     }
 
