@@ -92,7 +92,9 @@ class WHMClient
      */
     public function sendRequest($endpoint, $method, array $params = [])
     {
+        $params = array_merge(['api.version' => 1], $params);
         $queryParams = http_build_query($params);
+
         $url         = sprintf("https://%s:%s%s", $this->whmHost, $this->whmPort, $endpoint);
 
         $request = new Request($method, $url . "?" . $queryParams);
