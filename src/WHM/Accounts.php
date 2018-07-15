@@ -2,10 +2,12 @@
 
 namespace PreviewTechs\cPanelWHM\WHM;
 
+use DateTime;
 use Http\Client\Exception;
 use PreviewTechs\cPanelWHM\Entity\Account;
 use PreviewTechs\cPanelWHM\Entity\Domain;
 use PreviewTechs\cPanelWHM\Entity\DomainUser;
+use PreviewTechs\cPanelWHM\Entity\SuspendedAccount;
 use PreviewTechs\cPanelWHM\Exceptions\ClientExceptions;
 use PreviewTechs\cPanelWHM\WHMClient;
 
@@ -68,40 +70,40 @@ class Accounts
     public function searchAccounts($keyword = null, $searchType = null, array $options = [])
     {
         $limit = 10;
-        $page = 1;
+        $page  = 1;
 
         $params = [
-            'api.version' => 1,
+            'api.version'      => 1,
             'api.chunk.enable' => 1,
-            'api.chunk.size' => $limit,
-            'api.chunk.start' => $page * $limit
+            'api.chunk.size'   => $limit,
+            'api.chunk.start'  => $page * $limit
         ];
 
-        if (!empty($options['limit'])) {
+        if ( ! empty($options['limit'])) {
             $params['api.chunk.size'] = intval($options['limit']);
         }
 
-        if (!empty($options['page'])) {
+        if ( ! empty($options['page'])) {
             $params['api.chunk.start'] = intval($options['page']) * $params['api.chunk.size'];
         }
 
-        if (!empty($searchType) && !in_array($searchType, ["domain", "owner", "user", "ip", "package"])) {
+        if ( ! empty($searchType) && ! in_array($searchType, ["domain", "owner", "user", "ip", "package"])) {
             throw new \InvalidArgumentException("`searchType` must be one of these - domain, owner, user, ip, package");
         }
 
-        if (!empty($options['searchmethod']) && !in_array($options['searchmethod'], ["exact", "regex"])) {
+        if ( ! empty($options['searchmethod']) && ! in_array($options['searchmethod'], ["exact", "regex"])) {
             throw new \InvalidArgumentException("options[searchmethod] must be either `regex` or `exact`");
         }
 
-        if (!empty($options['want'])) {
+        if ( ! empty($options['want'])) {
             $params['want'] = $options['want'];
         }
 
-        if (!empty($searchType)) {
+        if ( ! empty($searchType)) {
             $params['searchtype'] = $searchType;
         }
 
-        if (!empty($keyword)) {
+        if ( ! empty($keyword)) {
             $params['search'] = $keyword;
             empty($searchType) ? $params['searchtype'] = "user" : null;
         }
@@ -118,8 +120,8 @@ class Accounts
 
         return [
             'accounts' => $accounts,
-            'count' => $params['api.chunk.size'],
-            'page' => $page
+            'count'    => $params['api.chunk.size'],
+            'page'     => $page
         ];
     }
 
@@ -143,7 +145,7 @@ class Accounts
             throw ClientExceptions::invalidArgument("You must provide either a username or a domain or both");
         }
 
-        if (!empty($user) && !empty($domain)) {
+        if ( ! empty($user) && ! empty($domain)) {
             throw ClientExceptions::invalidArgument(
                 "You must provide only one argument either user OR domain (not both)"
             );
@@ -151,11 +153,11 @@ class Accounts
 
         $params = [];
 
-        if (!empty($user)) {
+        if ( ! empty($user)) {
             $params['user'] = $user;
         }
 
-        if (!empty($domain)) {
+        if ( ! empty($domain)) {
             $params['domain'] = $domain;
         }
 
@@ -166,11 +168,11 @@ class Accounts
 
         if ($result['status'] === 0) {
             throw ClientExceptions::recordNotFound(
-                !empty($result['statusmsg']) ? $result['statusmsg'] : "Record not found"
+                ! empty($result['statusmsg']) ? $result['statusmsg'] : "Record not found"
             );
         }
 
-        if (!empty($result['acct']) && is_array($result['acct'])) {
+        if ( ! empty($result['acct']) && is_array($result['acct'])) {
             return Account::buildFromArray($result['acct'][0]);
         }
 
@@ -196,7 +198,7 @@ class Accounts
     {
         $result = $this->client->sendRequest("/json-api/applist", 'GET', []);
 
-        if (!empty($result['app']) && sizeof($result['app']) > 0) {
+        if ( ! empty($result['app']) && sizeof($result['app']) > 0) {
             return $result['app'];
         }
 
@@ -213,6 +215,7 @@ class Accounts
      *
      * @param Account $account
      * @param array $options
+     *
      * @return array
      * @throws ClientExceptions
      * @throws Exception
@@ -227,21 +230,21 @@ class Accounts
             throw ClientExceptions::invalidArgument("You must provide a domain to create new account");
         }
 
-        $params = [];
+        $params             = [];
         $params['username'] = $account->getUser();
-        $params['domain'] = $account->getDomain();
-        !empty($account->getPlanName()) ? $params['plan'] = $account->getPlanName() : null;
-        !empty($options['pkgname']) ? $params['pkgname'] = $options['pkgname'] : null;
-        if (!empty($options['savepkg'])) {
-            if (!in_array(intval($options['savepkg']), [0, 1])) {
+        $params['domain']   = $account->getDomain();
+        ! empty($account->getPlanName()) ? $params['plan'] = $account->getPlanName() : null;
+        ! empty($options['pkgname']) ? $params['pkgname'] = $options['pkgname'] : null;
+        if ( ! empty($options['savepkg'])) {
+            if ( ! in_array(intval($options['savepkg']), [0, 1])) {
                 throw new ClientExceptions("`savepkg` must be either 0 or 1");
             }
 
             $params['savepkg'] = $options['savepkg'];
         }
 
-        !empty($options['featurelist']) ? $params['featurelist'] = $options['featurelist'] : null;
-        if (!empty($account->getDiskLimit())) {
+        ! empty($options['featurelist']) ? $params['featurelist'] = $options['featurelist'] : null;
+        if ( ! empty($account->getDiskLimit())) {
             if ($account->getDiskLimit() === -1) {
                 $params['quota'] = 0;
             } else {
@@ -249,17 +252,17 @@ class Accounts
             }
         }
 
-        !empty($account->getPassword()) ? $params['password'] = $account->getPassword() : null;
-        !empty($account->getIpAddress()) ? $params['ip'] = $account->getIpAddress() : null;
-        !empty($account->isCgiEnable()) ? $params['cgi'] = (int)$account->isCgiEnable() : null;
-        !empty($account->isSpamAssassinEnable()) ?
+        ! empty($account->getPassword()) ? $params['password'] = $account->getPassword() : null;
+        ! empty($account->getIpAddress()) ? $params['ip'] = $account->getIpAddress() : null;
+        ! empty($account->isCgiEnable()) ? $params['cgi'] = (int)$account->isCgiEnable() : null;
+        ! empty($account->isSpamAssassinEnable()) ?
             $params['spamassassin'] = (int)$account->isSpamAssassinEnable()
             : null;
-        !empty($account->isFrontPageEnable()) ? $params['frontpage'] = (int)$account->isFrontPageEnable() : null;
-        !empty($account->getShell()) ? $params['hasshell'] = 1 : null;
-        !empty($account->getEmail()) ? $params['contactemail'] = 1 : null;
-        !empty($account->getEmail()) ? $params['contactemail'] = 1 : null;
-        !empty($account->getTheme()) ? $params['cpmod'] = 1 : null;
+        ! empty($account->isFrontPageEnable()) ? $params['frontpage'] = (int)$account->isFrontPageEnable() : null;
+        ! empty($account->getShell()) ? $params['hasshell'] = 1 : null;
+        ! empty($account->getEmail()) ? $params['contactemail'] = 1 : null;
+        ! empty($account->getEmail()) ? $params['contactemail'] = 1 : null;
+        ! empty($account->getTheme()) ? $params['cpmod'] = 1 : null;
 
         if ($account->getMaxFTP() === -1) {
             $params['maxftp'] = "unlimited";
@@ -309,18 +312,18 @@ class Accounts
             $params['bwlimit'] = intval($account->getBandwidthLimit());
         }
 
-        !empty($options['customip']) ? $params['customip'] = $options['customip'] : null;
+        ! empty($options['customip']) ? $params['customip'] = $options['customip'] : null;
 
-        !empty($account->getLanguagePreference()) ? $params['language'] = $account->getLanguagePreference() : null;
+        ! empty($account->getLanguagePreference()) ? $params['language'] = $account->getLanguagePreference() : null;
 
-        !empty($options['useregns']) ? $params['useregns'] = $options['useregns'] : null;
-        !empty($options['reseller']) ? $params['reseller'] = (int)$options['reseller'] : null;
-        !empty($options['forcedns']) ? $params['forcedns'] = (int)$options['forcedns'] : null;
+        ! empty($options['useregns']) ? $params['useregns'] = $options['useregns'] : null;
+        ! empty($options['reseller']) ? $params['reseller'] = (int)$options['reseller'] : null;
+        ! empty($options['forcedns']) ? $params['forcedns'] = (int)$options['forcedns'] : null;
 
-        !empty($account->getMailboxFormat()) ? $params['mailbox_format'] = $account->getMailboxFormat() : null;
+        ! empty($account->getMailboxFormat()) ? $params['mailbox_format'] = $account->getMailboxFormat() : null;
 
-        if (!empty($options['mxcheck'])) {
-            if (!in_array($options['mxcheck'], ['local', 'secondary', 'remote', 'auto'])) {
+        if ( ! empty($options['mxcheck'])) {
+            if ( ! in_array($options['mxcheck'], ['local', 'secondary', 'remote', 'auto'])) {
                 throw new ClientExceptions("options[mxcheck] parameters must be one of local, secondary, remote, auto");
             }
 
@@ -345,19 +348,19 @@ class Accounts
             $params['max_defer_fail_percentage'] = intval($account->getMaxDeferFailMailPercentage());
         }
 
-        !empty($account->getUid()) ? $params['uid'] = $account->getUid() : null;
-        !empty($account->getPartition()) ? $params['homedir'] = $account->getPartition() : null;
-        !empty($options['dkim']) ? $params['dkim'] = intval($options['dkim']) : null;
-        !empty($options['spf']) ? $params['spf'] = intval($options['spf']) : null;
-        !empty($account->getOwner()) ? $params['owner'] = $account->getOwner() : null;
+        ! empty($account->getUid()) ? $params['uid'] = $account->getUid() : null;
+        ! empty($account->getPartition()) ? $params['homedir'] = $account->getPartition() : null;
+        ! empty($options['dkim']) ? $params['dkim'] = intval($options['dkim']) : null;
+        ! empty($options['spf']) ? $params['spf'] = intval($options['spf']) : null;
+        ! empty($account->getOwner()) ? $params['owner'] = $account->getOwner() : null;
 
         $result = $this->client->sendRequest("/json-api/createacct", "GET", $params);
 
-        if (!empty($result) && !empty($result['result'][0]) && $result['result'][0]['status'] === 0) {
+        if ( ! empty($result) && ! empty($result['result'][0]) && $result['result'][0]['status'] === 0) {
             throw new ClientExceptions($result['result'][0]['statusmsg']);
         }
 
-        if (!empty($result) && !empty($result['result'][0]) && $result['result'][0]['status'] === 1) {
+        if ( ! empty($result) && ! empty($result['result'][0]) && $result['result'][0]['status'] === 1) {
             return ['result' => $result['result'][0]['options'], 'raw_output' => $result['result'][0]['rawout']];
         }
 
@@ -370,7 +373,9 @@ class Accounts
      * WHM API function: Accounts -> domainuserdata
      *
      * @link https://documentation.cpanel.net/display/DD/WHM+API+1+Functions+-+domainuserdata
+     *
      * @param $domain
+     *
      * @return null|DomainUser
      * @throws ClientExceptions
      * @throws Exception
@@ -388,7 +393,7 @@ class Accounts
             throw new ClientExceptions($result['result'][0]['statusmsg']);
         }
 
-        $userData = $result['userdata'];
+        $userData   = $result['userdata'];
         $domainUser = new DomainUser();
         $domainUser->setHasCGI((bool)$userData['hascgi']);
         $domainUser->setServerName($userData['servername']);
@@ -422,6 +427,7 @@ class Accounts
      *
      * @param $username
      * @param $newQuota
+     *
      * @return bool
      * @throws ClientExceptions
      * @throws Exception
@@ -431,6 +437,7 @@ class Accounts
         $params = ['user' => $username, 'quota' => $newQuota];
 
         $this->client->sendRequest("/json-api/editquota", "GET", $params);
+
         return true;
     }
 
@@ -443,6 +450,7 @@ class Accounts
      *
      * @param array $usernames
      * @param int $stopOnFail
+     *
      * @return null
      * @throws ClientExceptions
      * @throws Exception
@@ -465,7 +473,7 @@ class Accounts
             throw new ClientExceptions($result['metadata']['reason']);
         }
 
-        if (!empty($result['data'])) {
+        if ( ! empty($result['data'])) {
             return $result['updated'];
         }
 
@@ -491,7 +499,7 @@ class Accounts
             return null;
         }
 
-        if (!empty($result['metadata']) && $result['metadata']['result'] === 1) {
+        if ( ! empty($result['metadata']) && $result['metadata']['result'] === 1) {
             $domains = $result['data']['domains'];
 
             $domainList = [];
@@ -517,5 +525,151 @@ class Accounts
         }
 
         return null;
+    }
+
+    /**
+     * Digest Authentication is enabled or disabled for any specific user.
+     * This function checks whether Digest Authentication is enabled for
+     * a cPanel user.
+     * Windows® Vista, Windows® 7, and Windows® 8 require Digest Authentication
+     * support in order to access Web Disk over an unencrypted connection.
+     *
+     * WHM API function: Accounts -> has_digest_auth
+     * @link https://documentation.cpanel.net/display/DD/WHM+API+1+Functions+-+has_digest_auth
+     *
+     * @param $user
+     *
+     * @return bool|null
+     * @throws ClientExceptions
+     * @throws Exception
+     */
+    public function hasDigestAuth($user)
+    {
+        $params = ['user' => $user];
+        $result = $this->client->sendRequest("/json-api/has_digest_auth", "GET", $params);
+        if ( ! empty($result['data'])) {
+            return $result['data']['digestauth'] === 1 ? true : false;
+        }
+
+        return null;
+    }
+
+    /**
+     * This function checks whether a cPanel user's home directory contains a valid .my.cnf file.
+     * WHM API function: Accounts -> has_mycnf_for_cpuser
+     * @link https://documentation.cpanel.net/display/DD/WHM+API+1+Functions+-+has_mycnf_for_cpuser
+     *
+     * @param $user
+     *
+     * @return bool|null
+     * @throws ClientExceptions
+     * @throws Exception
+     */
+    public function hasMyCnfInHomeDirectory($user)
+    {
+        $params = ['user' => $user];
+        $result = $this->client->sendRequest("/json-api/has_mycnf_for_cpuser", "GET", $params);
+        if ( ! empty($result['data'])) {
+            return $result['data']['has_mycnf_for_cpuser'] === 1 ? true : false;
+        }
+
+        return null;
+    }
+
+    /**
+     * Modify a cPanel account's bandwidth quota.
+     * WHM API function: Accounts -> limitbw
+     * @link https://documentation.cpanel.net/display/DD/WHM+API+1+Functions+-+limitbw
+     *
+     * @param $user
+     * @param $bwlimit
+     *
+     * @return null
+     * @throws ClientExceptions
+     * @throws Exception
+     */
+    public function limitBandwidth($user, $bwlimit)
+    {
+        $params = ['user' => $user, 'bwlimit' => intval($bwlimit)];
+        $result = $this->client->sendRequest("/json-api/limitbw", "GET", $params);
+        if ( ! empty($result['metadata']) && $result['metadata']['result'] === 1) {
+            return $result['data']['bwlimits'][0];
+        }
+
+        return null;
+    }
+
+
+    /**
+     * Get lists of the cPanel user accounts and the root user on the server.
+     * WHM API function: Accounts -> list_users
+     * @link https://documentation.cpanel.net/display/DD/WHM+API+1+Functions+-+list_users
+     *
+     * @return array
+     * @throws ClientExceptions
+     * @throws Exception
+     */
+    public function getUsers()
+    {
+        $result = $this->client->sendRequest("/json-api/list_users", "GET", []);
+        if ( ! empty($result['metadata']) && $result['metadata']['result'] === 1) {
+            return $result['data']['users'];
+        }
+
+        return [];
+    }
+
+    /**
+     * Get a list of locked accounts.
+     * This function lists locked accounts on the server. Only WHM users with root-level privileges can unsuspend locked accounts.
+     *
+     * WHM API function: Accounts -> listlockedaccounts
+     * @link https://documentation.cpanel.net/display/DD/WHM+API+1+Functions+-+listlockedaccounts
+     *
+     * @return array
+     * @throws ClientExceptions
+     * @throws Exception
+     */
+    public function getLockedAccounts()
+    {
+        $result = $this->client->sendRequest("/json-api/listlockedaccounts", "GET", []);
+        if ( ! empty($result['metadata']) && $result['metadata']['result'] === 1) {
+            return $result['data']['account'];
+        }
+
+        return [];
+    }
+
+    /**
+     * Get a list of suspended accounts
+     *
+     * WHM API function: listsuspended
+     * @link https://documentation.cpanel.net/display/DD/WHM+API+1+Functions+-+listsuspended
+     *
+     * @return SuspendedAccount[]
+     * @throws ClientExceptions
+     * @throws Exception
+     */
+    public function getSuspendedAccounts()
+    {
+        $result = $this->client->sendRequest("/json-api/listsuspended", "GET", []);
+        if ( ! empty($result['metadata']) && $result['metadata']['result'] === 1) {
+            $suspendList = $result['data']['account'];
+
+            $lists = [];
+            foreach ($suspendList as $item) {
+                $sa = new SuspendedAccount();
+                $sa->setUser($item['user']);
+                $sa->setOwner($item['owner']);
+                $sa->setIsLocked((bool)$item['is_locked']);
+                $sa->setReason($item['reason']);
+                $sa->setTime(DateTime::createFromFormat("D M j H:i:s Y", $item['time']));
+                $lists[] = $sa;
+            }
+
+            return $lists;
+        }
+
+        return [];
     }
 }
