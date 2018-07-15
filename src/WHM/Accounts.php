@@ -910,4 +910,66 @@ class Accounts
 
         return false;
     }
+
+    /**
+     * This function retrieves account bandwidth information.
+     * WHM API function: Accounts -> showbw
+     * @link https://documentation.cpanel.net/display/DD/WHM+API+1+Functions+-+showbw
+     *
+     * @param null $month
+     * @param null $year
+     * @param null $resellerUsername
+     * @param null $searchKeyword
+     * @param null $searchType
+     *
+     * @return array
+     * @throws ClientExceptions
+     * @throws Exception
+     */
+    public function getBandwidthInfo($month = null, $year = null, $resellerUsername = null, $searchKeyword = null, $searchType = null)
+    {
+        $params = [];
+        if(!empty($searchKeyword)){
+            $params['search'] = $searchKeyword;
+        }
+
+        if(!empty($searchType) && !in_array($searchType, ["domain", "user", "owner", "ip", "package"])){
+            throw new ClientExceptions("searchType must be one of domain, user, owner, ip and package");
+        }
+
+        if(!empty($searchType)){
+            $params['searchtype'] = $searchType;
+        }
+
+        if(!empty($month) && !is_int($month)){
+            throw new ClientExceptions("month must be an integer");
+        }
+        if(!empty($month)){
+            $params['month'] = intval($month);
+        }
+
+        if(!empty($year) && !is_int($year)){
+            throw new ClientExceptions("year must be an integer");
+        }
+
+        if(!empty($year)){
+            $params['year'] = intval($year);
+        }
+
+        if(!empty($resellerUsername)){
+            $params['showres'] = $resellerUsername;
+        }
+
+        $result = $this->client->sendRequest("/json-api/showbw", "GET", $params);
+
+        if(!empty($result['metadata']) && $result['metadata']['result'] === 0){
+            throw new ClientExceptions($result['metadata']['reason']);
+        }
+
+        if(!empty($result['metadata']) && $result['metadata']['result'] === 1) {
+            return $result['data']['acct'];
+        }
+
+        return [];
+    }
 }
