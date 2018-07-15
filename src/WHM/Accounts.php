@@ -4,6 +4,7 @@ namespace PreviewTechs\cPanelWHM\WHM;
 
 use Http\Client\Exception;
 use PreviewTechs\cPanelWHM\Entity\Account;
+use PreviewTechs\cPanelWHM\Entity\DomainUser;
 use PreviewTechs\cPanelWHM\Exceptions\ClientExceptions;
 use PreviewTechs\cPanelWHM\WHMClient;
 
@@ -360,5 +361,56 @@ class Accounts
         }
 
         return [];
+    }
+
+    /**
+     * This function retrieves domain data.
+     *
+     * WHM API function: Accounts -> domainuserdata
+     *
+     * @link https://documentation.cpanel.net/display/DD/WHM+API+1+Functions+-+domainuserdata
+     * @param $domain
+     * @return null|DomainUser
+     * @throws ClientExceptions
+     * @throws Exception
+     */
+    public function domainDetails($domain)
+    {
+        $params = ['domain' => $domain];
+
+        $result = $this->client->sendRequest("/json-api/domainuserdata", "GET", $params);
+        if(empty($result)){
+            return null;
+        }
+
+        if($result['result'][0]['status'] === 0){
+            throw new ClientExceptions($result['result'][0]['statusmsg']);
+        }
+
+        $userData = $result['userdata'];
+        $domainUser = new DomainUser();
+        $domainUser->setHasCGI((bool) $userData['hascgi']);
+        $domainUser->setServerName($userData['servername']);
+        $domainUser->setOwner($userData['owner']);
+        $domainUser->setScriptAlias($userData['scriptalias']);
+        $domainUser->setHomeDirectory($userData['homedir']);
+        $domainUser->setCustomLog($userData['customlog']);
+        $domainUser->setUser($userData['user']);
+        $domainUser->setGroup($userData['group']);
+        $domainUser->setIpAddress($userData['ip']);
+        $domainUser->setPort($userData['port']);
+        $domainUser->setPhpOpenBaseDirectoryProtect((bool) $userData['phpopenbasedirprotect']);
+
+        if($userData['usecanonicalname'] === "Off"){
+            $domainUser->setUseCanonicalName(false);
+        }elseif($userData['usecanonicalname'] === "On"){
+            $domainUser->setUseCanonicalName(true);
+        }
+
+        $domainUser->setServerAdmin($userData['serveradmin']);
+        $domainUser->setServerAlias($userData['serveralias']);
+        $domainUser->setDocumentRoot($userData['documentroot']);
+
+        return $domainUser;
     }
 }
