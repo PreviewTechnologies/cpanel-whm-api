@@ -432,4 +432,42 @@ class Accounts
         $this->client->sendRequest("/json-api/editquota", "GET", $params);
         return true;
     }
+
+    /**
+     * This function forces a user to change the account password after the next login attempt.
+     *
+     * WHM API function: Accounts -> forcepasswordchange
+     *
+     * @link https://documentation.cpanel.net/display/DD/WHM+API+1+Functions+-+forcepasswordchange
+     *
+     * @param array $usernames
+     * @param int $stopOnFail
+     * @return null
+     * @throws ClientExceptions
+     * @throws Exception
+     */
+    public function forcePasswordChange(array $usernames, $stopOnFail = 1)
+    {
+        $params = [
+            "stop_on_failure" => $stopOnFail
+        ];
+
+        $usersJson = [];
+        foreach ($usernames as $username){
+            $usersJson[$username] = 1;
+        }
+
+        $params['users_json'] = json_encode($usersJson);
+
+        $result = $this->client->sendRequest("/json-api/forcepasswordchange", "GET", $params);
+        if($result['metadata']['result'] === 0){
+            throw new ClientExceptions($result['metadata']['reason']);
+        }
+
+        if(!empty($result['data'])){
+            return $result['updated'];
+        }
+
+        return null;
+    }
 }
