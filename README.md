@@ -56,6 +56,9 @@ $whmClient = new WHMClient("WHM_USERNAME","API_TOKEN", "yourwhmserver.com", 2087
     - getDetails (Details of a specific account)
     - create (Create a new account)
     - availableFunctions (List of API functions available for current authenticated user)
+    - domainDetails (Get a hosted domain details)
+    - changeDiskSpaceQuota (Modify an user's disk space quota)
+    - forcePasswordChange (Force user to change their password at their next login)
     
 
 ### Contibutions
