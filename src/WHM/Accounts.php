@@ -849,4 +849,32 @@ class Accounts
 
         return null;
     }
+
+    /**
+     * This function deletes a cPanel or WHM account.
+     *
+     * WHM API function: Accounts -> removeacct
+     * @link https://documentation.cpanel.net/display/DD/WHM+API+1+Functions+-+removeacct
+     * @param $username
+     * @param bool $keepDNS
+     *
+     * @return bool
+     * @throws ClientExceptions
+     * @throws Exception
+     */
+    public function remove($username, $keepDNS = false)
+    {
+        $params = ['user' => $username, 'keepdns' => (int) $keepDNS];
+        $result = $this->client->sendRequest("/json-api/removeacct", "GET", $params);
+
+        if(!empty($result['metadata']) && $result['metadata']['result'] === 0){
+            throw new ClientExceptions($result['metadata']['reason']);
+        }
+
+        if(!empty($result['metadata']) && $result['metadata']['result'] === 1){
+            return true;
+        }
+
+        return false;
+    }
 }
