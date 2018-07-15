@@ -563,6 +563,39 @@ class Accounts
     }
 
     /**
+     * This function enables or disables Digest Authentication for an account.
+     * Windows Vista®, Windows® 7, and Windows® 8 requires that
+     * you enable Digest Authentication support in order to access your Web Disk over a clear text,
+     * unencrypted connection.
+     *
+     * WHM API function: Accounts -> set_digest_auth
+     * @link https://documentation.cpanel.net/display/DD/WHM+API+1+Functions+-+set_digest_auth
+     *
+     * @param $user
+     * @param $password
+     * @param bool $enableDigestAuth
+     *
+     * @return bool
+     * @throws ClientExceptions
+     * @throws Exception
+     */
+    public function setDigestAuth($user, $password, $enableDigestAuth = true)
+    {
+        $params = ['user' => $user, 'password' => $password, 'digestauth' => (int) $enableDigestAuth];
+        $result = $this->client->sendRequest("/json-api/set_digest_auth", "GET", $params);
+
+        if(!empty($result['metadata']) && $result['metadata']['result'] === 0){
+            throw new ClientExceptions($result['metadata']['reason']);
+        }
+
+        if(!empty($result['metadata']) && $result['metadata']['result'] === 1){
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * This function checks whether a cPanel user's home directory contains a valid .my.cnf file.
      * WHM API function: Accounts -> has_mycnf_for_cpuser
      * @link https://documentation.cpanel.net/display/DD/WHM+API+1+Functions+-+has_mycnf_for_cpuser
