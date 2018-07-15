@@ -35,6 +35,5 @@
     "scripts":{
         "phpcs": "vendor/bin/phpcs --standard=psr2 src/",
         "phpunit": "vendor/bin/phpunit"
-        //"all": "composer run phpcs && composer run phpunit"
     }
 }
