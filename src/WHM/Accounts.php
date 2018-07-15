@@ -33,6 +33,8 @@ class Accounts
     /**
      * Search accounts from your WHM server.
      *
+     * WHM API function: Accounts -> listaccts
+     *
      * $accounts = new Accounts($c);
      * $keyword = "search_keyword";
      * $searchType = "username";   //valid search types are "domain", "owner", "user", "ip", "package"
@@ -122,6 +124,8 @@ class Accounts
     /**
      * Get an account details
      *
+     * WHM API function: Accounts -> accountsummary
+     *
      * @link https://documentation.cpanel.net/display/DD/WHM+API+1+Functions+-+accountsummary
      *
      * @param null $user
@@ -169,5 +173,31 @@ class Accounts
         }
 
         return null;
+    }
+
+    /**
+     * This function lists available WHM API 1 functions.
+     *
+     * This function only lists the functions that are available to the current user.
+     * For example, if the authenticated user is a reseller without root -level privileges,
+     * the function will not list WHM API 1 functions that require root privileges.
+     *
+     * WHM API function: Accounts -> applist
+     *
+     * @link https://documentation.cpanel.net/display/DD/WHM+API+1+Functions+-+applist
+     *
+     * @return array
+     * @throws ClientExceptions
+     * @throws Exception
+     */
+    public function availableFunctions()
+    {
+        $result = $this->client->sendRequest("/json-api/applist", 'GET', []);
+
+        if(!empty($result['app']) && sizeof($result['app']) > 0){
+            return $result['app'];
+        }
+
+        return [];
     }
 }
