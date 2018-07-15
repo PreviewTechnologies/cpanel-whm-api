@@ -5,6 +5,7 @@ Manage your WHM/cPanel server with this PHP library. Simple to use. With this PH
 [![Build Status](https://api.travis-ci.org/PreviewTechnologies/cpanel-whm-api.svg?branch=master)](https://travis-ci.org/PreviewTechnologies/cpanel-whm-api)
 [![Code Coverage](https://scrutinizer-ci.com/g/PreviewTechnologies/cpanel-whm-api/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/PreviewTechnologies/cpanel-whm-api/?branch=master)
 [![Code Quality](https://scrutinizer-ci.com/g/PreviewTechnologies/cpanel-whm-api/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/PreviewTechnologies/cpanel-whm-api/?branch=master)
+[![Code Quality](https://scrutinizer-ci.com/g/PreviewTechnologies/cpanel-whm-api/badges/code-intelligence.svg?b=master)](https://scrutinizer-ci.com/g/PreviewTechnologies/cpanel-whm-api/?branch=master)
 
 ### Installation
 
@@ -60,6 +61,12 @@ $whmClient = new WHMClient("WHM_USERNAME","API_TOKEN", "yourwhmserver.com", 2087
     - changeDiskSpaceQuota (Modify an user's disk space quota)
     - forcePasswordChange (Force user to change their password at their next login)
     - getDomains (List of domains exists in the server)
+    - hasDigestAuth (Digest auth is enabled or disabled)
+    - hasMyCnfInHomeDirectory (.my.cnf file exists in user's home directory or not)
+    - limitBandwidth (Modify bandwidth limit)
+    - getUsers (List of all users in server)
+    - getLockedAccounts (List of all locked accounts)
+    - getSuspendedAccounts (List of all suspended accounts)
     
 
 ### Contibutions
