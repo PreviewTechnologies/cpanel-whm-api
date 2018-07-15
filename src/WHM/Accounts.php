@@ -808,4 +808,45 @@ class Accounts
 
         return false;
     }
+
+    /**
+     * WHM API function: Accounts -> passwd
+     * @link https://documentation.cpanel.net/display/DD/WHM+API+1+Functions+-+passwd
+     *
+     * @param $user
+     * @param $newPassword
+     * @param null $digestAuth
+     * @param bool $dbPassUpdate
+     *
+     * @return null|array
+     * @throws ClientExceptions
+     * @throws Exception
+     */
+    public function changePassword($user, $newPassword, $digestAuth = null, $dbPassUpdate = false)
+    {
+        $params = [
+            'user' => $user,
+            'password' => $newPassword
+        ];
+
+        if(isset($digestAuth)){
+            $params['digestauth'] = (int) $digestAuth;
+        }
+
+        if(isset($dbPassUpdate)){
+            $params['db_pass_update'] = (int) $dbPassUpdate;
+        }
+
+        $result = $this->client->sendRequest("/json-api/passwd", "GET", $params);
+
+        if(!empty($result['metadata']) && $result['metadata']['result'] === 0){
+            throw new ClientExceptions($result['metadata']['reason']);
+        }
+
+        if(!empty($result['metadata']) && $result['metadata']['result'] === 1){
+            return $result['data']['app'];
+        }
+
+        return null;
+    }
 }
