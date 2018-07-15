@@ -972,4 +972,33 @@ class Accounts
 
         return [];
     }
+
+    /**
+     * This function suspends an account. Suspension denies the user access to the account. Unlike account deletion, you can reverse account suspension.
+     * WHM API function: Accounts->suspendacct
+     * @link https://documentation.cpanel.net/display/DD/WHM+API+1+Functions+-+suspendacct
+     *
+     * @param $user
+     * @param $reason
+     * @param bool $disallowUnsuspension
+     *
+     * @return bool
+     * @throws ClientExceptions
+     * @throws Exception
+     */
+    public function suspend($user, $reason, $disallowUnsuspension = true)
+    {
+        $params = ['user' => $user, 'reason' => $reason, 'disallowun' => (int) $disallowUnsuspension];
+        $result = $this->client->sendRequest("/json-api/suspendacct", "GET", $params);
+
+        if(!empty($result['metadata']) && $result['metadata']['result'] === 0){
+            throw new ClientExceptions($result['metadata']['reason']);
+        }
+
+        if(!empty($result['metadata']) && $result['metadata']['result'] === 1){
+            return true;
+        }
+
+        return false;
+    }
 }
