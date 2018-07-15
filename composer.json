@@ -31,5 +31,10 @@
         "phpunit/phpunit": "^4.8",
         "php-http/mock-client": "^1.1",
         "squizlabs/php_codesniffer": "^3.3"
+    },
+    "scripts":{
+        "phpcs": "vendor/bin/phpcs --standard=psr2 src/",
+        "phpunit": "vendor/bin/phpunit"
+        //"all": "composer run phpcs && composer run phpunit"
     }
 }
