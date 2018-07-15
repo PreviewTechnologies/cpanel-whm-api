@@ -54,6 +54,8 @@ $whmClient = new WHMClient("WHM_USERNAME","API_TOKEN", "yourwhmserver.com", 2087
   - Accounts
     - searchAccounts (List of all accounts)
     - getDetails (Details of a specific account)
+    - create (Create a new account)
+    - availableFunctions (List of API functions available for current authenticated user)
     
 
 ### Contibutions
