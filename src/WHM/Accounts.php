@@ -356,12 +356,20 @@ class Accounts
 
         $result = $this->client->sendRequest("/json-api/createacct", "GET", $params);
 
+        if(!empty($result['metadata']) && $result['metadata']['result'] === 0){
+            throw new ClientExceptions($result['metadata']['reason']);
+        }
+
         if ( ! empty($result) && ! empty($result['result'][0]) && $result['result'][0]['status'] === 0) {
             throw new ClientExceptions($result['result'][0]['statusmsg']);
         }
 
         if ( ! empty($result) && ! empty($result['result'][0]) && $result['result'][0]['status'] === 1) {
             return ['result' => $result['result'][0]['options'], 'raw_output' => $result['result'][0]['rawout']];
+        }
+
+        if(!empty($result['metadata']) && $result['metadata']['result'] === 1){
+            return ['result' => $result['data'], 'raw_output' => $result['metadata']['output']['raw']];
         }
 
         return [];
@@ -671,5 +679,133 @@ class Accounts
         }
 
         return [];
+    }
+
+    /**
+     * This function modifies a cPanel account.
+     * You must define the user parameter to identify which account to update.
+     * All other input parameters are optional, and assign new values to the account.
+     * If you specify the current value in one of these parameters, no change will occur.
+     *
+     * WHM API function: Accounts -> modifyacct
+     * @link https://documentation.cpanel.net/display/DD/WHM+API+1+Functions+-+modifyacct
+     *
+     * @param Account $account
+     *
+     * @return bool
+     * @throws ClientExceptions
+     * @throws Exception
+     */
+    public function modifyAccount(Account $account)
+    {
+        if(empty($account->getUser())){
+            throw ClientExceptions::invalidArgument("You must provide username to modify account");
+        }
+
+        $params = [
+            'user' => $account->getUser()
+        ];
+
+        if($account->isBackupEnabled()){
+            $params['BACKUP'] = 1;
+        }
+
+        if($account->getBandwidthLimit() === -1){
+            $params['BWLIMIT'] = "unlimited";
+        }
+
+        if(!empty($account->getDomain())){
+            $params['DNS'] = $account->getDomain();
+        }
+
+        if(!empty($account->isCgiEnable())){
+            $params['HASCGI'] = (int) $account->isCgiEnable();
+        }
+
+        if(!empty($account->getMaxAddonDomains())){
+            $params['MAXADDON'] = $account->getMaxAddonDomains() === -1 ? "unlimited" : intval($account->getMaxAddonDomains());
+        }
+
+        if(!empty($account->getMaxFTP())){
+            $params['MAXFTP'] = $account->getMaxFTP() === -1 ? "unlimited" : intval($account->getMaxFTP());
+        }
+
+        if(!empty($account->getMaxMailingList())){
+            $params['MAXLST'] = $account->getMaxMailingList() === -1 ? "unlimited" : intval($account->getMaxMailingList());
+        }
+
+        if(!empty($account->getMaxParkedDomains())){
+            $params['MAXPARK'] = $account->getMaxParkedDomains() === -1 ? "unlimited" : intval($account->getMaxParkedDomains());
+        }
+
+        if(!empty($account->getMaxPOP())){
+            $params['MAXPOP'] = $account->getMaxPOP() === -1 ? "unlimited" : null;
+        }
+
+        if(!empty($account->getMaxSQL())){
+            $params['MAXSQL'] = $account->getMaxSQL() === -1 ? "unlimited" : intval($account->getMaxSQL());
+        }
+
+        if(!empty($account->getMaxSubDomain())){
+            $params['MAXSUB'] = $account->getMaxSubDomain() === -1 ? "unlimited" : intval($account->getMaxSubDomain());
+        }
+
+        if(!empty($account->getMaxEmailPerHour())){
+            $params['MAX_EMAIL_PER_HOUR'] = $account->getMaxEmailPerHour() === -1 ? "unlimited" : intval($account->getMaxEmailPerHour());
+        }
+        if(!empty($account->getMaxEmailAccountQuota())){
+            $params['MAX_EMAILACCT_QUOTA'] = $account->getMaxEmailAccountQuota() === -1 ? "unlimited" : intval($account->getMaxDeferFailMailPercentage());
+        }
+
+        if(!empty($account->getMaxDeferFailMailPercentage())){
+            $params['MAX_DEFER_FAIL_PERCENTAGE'] = $account->getMaxDeferFailMailPercentage() === -1 ? "unlimited" : intval($account->getMaxDeferFailMailPercentage());
+        }
+
+        if(!empty($account->getOwner())){
+            $params['owner'] = $account->getOwner();
+        }
+
+        if(!empty($account->getDiskLimit())){
+            $params['QUOTA'] = $account->getDiskLimit() === -1 ? "unlimited" : intval($account->getDiskLimit());
+        }
+
+        if($account->isSpamAssassinEnable()){
+            $params['spamassassin'] = (int) $account->isSpamAssassinEnable();
+        }
+
+        if($account->isFrontPageEnable()){
+            $params['frontpage'] = (int) $account->isFrontPageEnable();
+        }
+
+        if(!empty($account->getTheme())){
+            $params['RS'] = $account->getTheme();
+        }
+
+        if(!empty($account->getIpAddress())){
+            $params['IP'] = $account->getIpAddress();
+        }
+
+        if(!empty($account->getLanguagePreference())){
+            $params['LANG'] = $account->getLanguagePreference();
+        }
+
+        if(!empty($account->getMailboxFormat())){
+            $params['MAILBOX_FORMAT'] = $account->getMailboxFormat();
+        }
+
+        if(is_bool($account->isOutgoingMailSuspended())){
+            $params['OUTGOING_EMAIL_SUSPENDED'] = (int) $account->isOutgoingMailSuspended();
+        }
+
+        $result = $this->client->sendRequest("/json-api/modifyacct", "GET", $params);
+        if(!empty($result['metadata']) && $result['metadata']['result'] === 1){
+            return true;
+        }
+
+        if(!empty($result['metadata']) && $result['metadata']['result'] === 0){
+            throw new ClientExceptions($result['metadata']['reason']);
+        }
+
+        return false;
     }
 }
