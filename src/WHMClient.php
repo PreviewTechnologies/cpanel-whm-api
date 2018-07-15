@@ -53,7 +53,7 @@ class WHMClient
         $this->whmHost  = $whmHost;
         $this->whmPort  = $whmPort;
 
-        $client = Client::createWithConfig(['timeout' => 15]);
+        $client = Client::createWithConfig(['timeout' => 120]);
         $this->setHttpClient($client);
         $this->httpClient = $this->getHttpClient();
     }
