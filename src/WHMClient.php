@@ -107,6 +107,10 @@ class WHMClient
             $data = json_decode((string)$response->getBody(), true);
         }
 
+        if(array_key_exists("status", $data) && $data['status'] === 0){
+            throw ClientExceptions::accessDenied(!empty($data['statusmsg']) ? $data['statusmsg'] : null);
+        }
+
         if ($response->getStatusCode() === 403) {
             if (! empty($data['cpanelresult']['error'])) {
                 throw ClientExceptions::accessDenied(
