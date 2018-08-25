@@ -162,18 +162,19 @@ class Accounts
         }
 
         $result = $this->client->sendRequest("/json-api/accountsummary", "GET", $params);
+
         if (empty($result)) {
             return null;
         }
 
-        if ($result['status'] === 0) {
+        if ($result['metadata']['reason'] != "OK") {
             throw ClientExceptions::recordNotFound(
-                ! empty($result['statusmsg']) ? $result['statusmsg'] : "Record not found"
+                ! empty($result['metadata']['reason']) ? $result['metadata']['reason'] : "Record not found"
             );
         }
 
-        if ( ! empty($result['acct']) && is_array($result['acct'])) {
-            return Account::buildFromArray($result['acct'][0]);
+        if ( ! empty($result['data']) && is_array($result['data']) && !empty($result['data']['acct'])) {
+            return Account::buildFromArray($result['data']['acct'][0]);
         }
 
         return null;
