@@ -261,8 +261,7 @@ class Accounts
             : null;
         ! empty($account->isFrontPageEnable()) ? $params['frontpage'] = (int)$account->isFrontPageEnable() : null;
         ! empty($account->getShell()) ? $params['hasshell'] = 1 : null;
-        ! empty($account->getEmail()) ? $params['contactemail'] = 1 : null;
-        ! empty($account->getEmail()) ? $params['contactemail'] = 1 : null;
+        ! empty($account->getEmail()) ? $params['contactemail'] = $account->getEmail() : null;
         ! empty($account->getTheme()) ? $params['cpmod'] = 1 : null;
 
         if ($account->getMaxFTP() === -1) {
