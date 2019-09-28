@@ -1053,4 +1053,34 @@ class Accounts
             return true;
         }
     }
+
+    /**
+     * This generates a URL for one-click login to cPanel.
+     *
+     * You can replace $service with a supported service, defaults to cPanel
+     * $app when set to something invalid will send the user to the cPanel home page, you
+     * can set it to anything valid to override the default of 'home'
+     *
+     * @link https://documentation.cpanel.net/display/DD/WHM+API+1+Functions+-+create_user_session
+     *
+     * @param $username
+     * @param string $service
+     * @param string $app
+     *
+     * @return mixed|\Psr\Http\Message\ResponseInterface
+     * @throws ClientExceptions
+     * @throws Exception
+     */
+    public function create_user_session($username, $service = 'cpaneld', $app = 'home')
+    {
+        $params = ['user' => $username, 'service' => $service, 'app' => $app];
+
+        $result = $this->client->sendRequest('/json-api/create_user_session', 'GET', $params);
+
+        if(!empty($result['metadata']) && $result['metadata']['result'] === 0){
+            throw new ClientExceptions($result['metadata']['reason']);
+        }
+
+        return $result;
+    }
 }
