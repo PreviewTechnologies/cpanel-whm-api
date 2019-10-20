@@ -1071,7 +1071,7 @@ class Accounts
      * @throws ClientExceptions
      * @throws Exception
      */
-    public function create_user_session($username, $service = 'cpaneld', $app = 'home')
+    public function createUserSession($username, $service = 'cpaneld', $app = 'home')
     {
         $params = ['user' => $username, 'service' => $service, 'app' => $app];
 
