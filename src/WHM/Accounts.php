@@ -1083,4 +1083,31 @@ class Accounts
 
         return $result;
     }
+
+    /**
+     * This changes the plan set on the account
+     *
+     * This is purely for changing the plan of the account
+     *
+     * @link https://documentation.cpanel.net/display/DD/WHM+API+1+Functions+-+modifyacct
+     *
+     * @param $username
+     * @param $plan
+     *
+     * @return mixed|\Psr\Http\Message\ResponseInterface
+     * @throws ClientExceptions
+     * @throws Exception
+     */
+    public function changePlan($username, $plan)
+    {
+        $params = ['user' => $username, 'plan' => $plan];
+
+        $result = $this->client->sendRequest('/json-api/modifyacct', 'GET', $params);
+
+        if(!empty($result['metadata']) && $result['metadata']['result'] === 0){
+            throw new ClientExceptions($result['metadata']['reason']);
+        }
+
+        return $result;
+    }
 }
