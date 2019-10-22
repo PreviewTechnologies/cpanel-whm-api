@@ -1100,9 +1100,9 @@ class Accounts
      */
     public function changePlan($username, $plan)
     {
-        $params = ['user' => $username, 'plan' => $plan];
+        $params = ['user' => $username, 'pkg' => $plan];
 
-        $result = $this->client->sendRequest('/json-api/modifyacct', 'GET', $params);
+        $result = $this->client->sendRequest('/json-api/changepackage', 'GET', $params);
 
         if(!empty($result['metadata']) && $result['metadata']['result'] === 0){
             throw new ClientExceptions($result['metadata']['reason']);
