@@ -199,8 +199,8 @@ class Accounts
     {
         $result = $this->client->sendRequest("/json-api/applist", 'GET', []);
 
-        if ( ! empty($result['app']) && sizeof($result['app']) > 0) {
-            return $result['app'];
+        if ( ! empty($result['data']['app']) && sizeof($result['data']['app']) > 0) {
+            return $result['data']['app'];
         }
 
         return [];
